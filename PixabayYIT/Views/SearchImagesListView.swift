@@ -8,11 +8,14 @@
 import UIKit
 
 class SearchImagesListView: UIView {
+    
+    private let viewModel = SearchImagesListViewViewModel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
+        viewModel.fetchImages()
     }
     
     required init?(coder: NSCoder) {
