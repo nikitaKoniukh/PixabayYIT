@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TabBarController.swift
 //  PixabayYIT
 //
 //  Created by Nikita Koniukh on 02/02/2023.
@@ -7,11 +7,10 @@
 
 import UIKit
 
-class TapBarController: UITabBarController {
+class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupTabs()
     }
 
@@ -34,6 +33,5 @@ class TapBarController: UITabBarController {
         
         setViewControllers([nav1, nav2], animated: true)
     }
-    
 }
 
