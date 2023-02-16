@@ -23,6 +23,7 @@ final class SearchImagesListView: UIView {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ImageHitCollectionViewCell.self, forCellWithReuseIdentifier: ImageHitCollectionViewCell.cellId)
+        collectionView.register(FooterLoaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -58,6 +59,12 @@ final class SearchImagesListView: UIView {
 }
 
 extension SearchImagesListView: SearchImagesListViewViewModelDelegate {
+    func didLoadMoreHits(with newIndexPaths: [IndexPath]) {
+        collectionView.performBatchUpdates {
+            self.collectionView.insertItems(at: newIndexPaths)
+        }
+    }
+    
     func didLoadInitialHits() {
         collectionView.reloadData()
         // TODO: animation with spinner

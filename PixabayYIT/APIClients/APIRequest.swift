@@ -15,6 +15,7 @@ final class APIRequest {
     }
     
     private let searchTerms: [String]
+    private let pageNumber: String
     public let httpMethod = "GET"
     
     public var urlString: String {
@@ -31,10 +32,13 @@ final class APIRequest {
     }
     
     public var url: URL? {
+        let page = "&page=" + pageNumber
+        let urlString = urlString + page
         return URL(string: urlString)
     }
     
-    init(searchTerms: [String]) {
+    init(searchTerms: [String], pageNumber: String) {
         self.searchTerms = searchTerms
+        self.pageNumber = pageNumber
     }
 }
