@@ -21,10 +21,13 @@ final class SearchImagesListView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
+        layout.sectionHeadersPinToVisibleBounds = true
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ImageHitCollectionViewCell.self, forCellWithReuseIdentifier: ImageHitCollectionViewCell.cellId)
         collectionView.register(FooterLoaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId)
+        collectionView.register(HeaderSearchCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSearchCollectionReusableView.headerId)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
 
@@ -35,8 +38,8 @@ final class SearchImagesListView: UIView {
         addSubviews(collectionView, spinner)
         setupCollectionView()
         addConstraints()
+        showWelcomeLabel()
         viewModel.delegate = self
-        viewModel.fetchImages()
     }
     
     required init?(coder: NSCoder) {
@@ -53,12 +56,57 @@ final class SearchImagesListView: UIView {
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
             collectionView.rightAnchor.constraint(equalTo: rightAnchor),
-            collectionView.leftAnchor.constraint(equalTo: leftAnchor)
+            collectionView.leftAnchor.constraint(equalTo: leftAnchor),
+            
+            spinner.widthAnchor.constraint(equalToConstant: 100),
+            spinner.heightAnchor.constraint(equalToConstant: 100),
+            spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+            spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+    }
+    
+    private func showCollectionView() {
+        spinner.stopAnimating()
+        collectionView.isHidden = false
+        UIView.animate(withDuration: 0.35, animations: { [weak self] in
+            self?.collectionView.alpha = 1
+        })
+    }
+    
+    private func showLoader() {
+        collectionView.restore()
+        collectionView.isHidden = true
+        collectionView.alpha = 0
+        spinner.startAnimating()
+    }
+    
+    private func showWelcomeLabel() {
+        collectionView.setEmptyMessage(.initial)
+    }
+    
+    private func showMessageLabel(with message: ResultMessage) {
+        collectionView.restore()
+        collectionView.setEmptyMessage(message)
     }
 }
 
 extension SearchImagesListView: SearchImagesListViewViewModelDelegate {
+    func searchFailed(with errorText: String) {
+        collectionView.reloadData()
+        showCollectionView()
+        showMessageLabel(with: .error(errorText: errorText))
+    }
+    
+    func startLoadingInitialHits() {
+        showLoader()
+    }
+    
+    func noImagesToShow() {
+        collectionView.reloadData()
+        showCollectionView()
+        showMessageLabel(with: .empty)
+    }
+    
     func didLoadMoreHits(with newIndexPaths: [IndexPath]) {
         collectionView.performBatchUpdates {
             self.collectionView.insertItems(at: newIndexPaths)
@@ -66,7 +114,8 @@ extension SearchImagesListView: SearchImagesListViewViewModelDelegate {
     }
     
     func didLoadInitialHits() {
+        showCollectionView()
         collectionView.reloadData()
-        // TODO: animation with spinner
+        collectionView.scrollToItem(at: [0,0], at: .bottom, animated: true)
     }
 }

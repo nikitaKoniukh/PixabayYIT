@@ -8,8 +8,11 @@
 import UIKit
 
 protocol SearchImagesListViewViewModelDelegate: AnyObject {
+    func startLoadingInitialHits()
     func didLoadInitialHits()
     func didLoadMoreHits(with newIndexPaths: [IndexPath])
+    func noImagesToShow()
+    func searchFailed(with errorText: String)
 }
 
 final class SearchImagesListViewViewModel: NSObject {
@@ -46,13 +49,24 @@ final class SearchImagesListViewViewModel: NSObject {
         return "\(nextPage)"
     }
     
-    public func fetchImages() {
+    private var searchTerms: [String] = []
+    
+    private func resetSearch() {
+        searchTerms = []
         hitsArray = []
-        let request = APIRequest(searchTerms: ["girls"], pageNumber: pageNumber)
+        cellViewModels = []
+    }
+    
+    public func fetchImages(searchTerms: [String]) {
+        let request = APIRequest(searchTerms: searchTerms, pageNumber: pageNumber, perPage: imagesPerPage.description)
         APIService.shared.execute(request, expecting: HitsResponse.self, completion: { [weak self] result in
             switch result {
             case .success(let hitsResponse):
-                guard let hits = hitsResponse.hits else {
+                guard let hits = hitsResponse.hits, !hits.isEmpty else {
+                    DispatchQueue.main.async {
+                        self?.resetSearch()
+                        self?.delegate?.noImagesToShow()
+                    }
                     return
                 }
                 
@@ -60,8 +74,11 @@ final class SearchImagesListViewViewModel: NSObject {
                 DispatchQueue.main.async {
                     self?.delegate?.didLoadInitialHits()
                 }
-            case .failure(let failure):
-                print(String(describing: failure))
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.resetSearch()
+                    self?.delegate?.searchFailed(with: error.localizedDescription)
+                }
             }
         })
     }
@@ -73,7 +90,7 @@ final class SearchImagesListViewViewModel: NSObject {
         
         isLoadingMoreImages = true
         
-        let request = APIRequest(searchTerms: ["girls"], pageNumber: pageNumber)
+        let request = APIRequest(searchTerms: searchTerms, pageNumber: pageNumber, perPage: imagesPerPage.description)
         APIService.shared.execute(request, expecting: HitsResponse.self, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
@@ -127,13 +144,23 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionFooter,
-              shouldShowLoader,
-              let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId, for: indexPath) as? FooterLoaderCollectionReusableView else {
+        
+        if kind == UICollectionView.elementKindSectionFooter,
+           shouldShowLoader,
+           let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId, for: indexPath) as? FooterLoaderCollectionReusableView {
+            if cellViewModels.count >= imagesPerPage, isLoadingMoreImages {
+                footer.startAnimating()
+            }
+            return footer
+        }
+        
+        if kind == UICollectionView.elementKindSectionHeader,
+           let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderSearchCollectionReusableView.headerId, for: indexPath) as? HeaderSearchCollectionReusableView {
+            header.searchBar.delegate = self
+            return header
+        } else {
             fatalError()
         }
-        footer.startAnimating()
-        return footer
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
@@ -141,6 +168,10 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
             return .zero
         }
         return CGSize(width: collectionView.frame.width, height: 100)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 50)
     }
 }
 
@@ -163,5 +194,31 @@ extension SearchImagesListViewViewModel: UIScrollViewDelegate {
             
             t.invalidate()
         })
+    }
+}
+
+extension SearchImagesListViewViewModel: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            return
+        }
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        delegate?.startLoadingInitialHits()
+        resetSearch()
+        let trimmed = text.components(separatedBy: " ")
+        searchTerms = trimmed
+        fetchImages(searchTerms: trimmed)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.endEditing(true)
+        resetSearch()
     }
 }

@@ -11,8 +11,9 @@ class FooterLoaderCollectionReusableView: UICollectionReusableView {
     static let footerId = "FooterLoaderCollectionReusableView"
     
     private let spinner: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
+        let spinner = UIActivityIndicatorView(style: .medium)
         spinner.hidesWhenStopped = true
+        spinner.stopAnimating()
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }()

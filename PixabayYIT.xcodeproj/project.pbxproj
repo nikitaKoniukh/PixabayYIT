@@ -26,6 +26,8 @@
 		CA4EA582299BB5FE00223FF6 /* ImageHitCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4EA581299BB5FE00223FF6 /* ImageHitCollectionViewCellViewModel.swift */; };
 		CA4EA586299BC6D600223FF6 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4EA585299BC6D600223FF6 /* ImageLoader.swift */; };
 		CAD889FF299E17CE003FA440 /* FooterLoaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD889FE299E17CE003FA440 /* FooterLoaderCollectionReusableView.swift */; };
+		CAD88A01299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A00299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift */; };
+		CAD88A03299E5C55003FA440 /* ResultMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A02299E5C55003FA440 /* ResultMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		CA4EA581299BB5FE00223FF6 /* ImageHitCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHitCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		CA4EA585299BC6D600223FF6 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		CAD889FE299E17CE003FA440 /* FooterLoaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterLoaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		CAD88A00299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSearchCollectionReusableView.swift; sourceTree = "<group>"; };
+		CAD88A02299E5C55003FA440 /* ResultMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,7 @@
 			children = (
 				CA4EA576299BA37500223FF6 /* HitsResponse.swift */,
 				CA4EA579299BA39200223FF6 /* Hits.swift */,
+				CAD88A02299E5C55003FA440 /* ResultMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 			children = (
 				CA4EA57F299BB4E100223FF6 /* ImageHitCollectionViewCell.swift */,
 				CAD889FE299E17CE003FA440 /* FooterLoaderCollectionReusableView.swift */,
+				CAD88A00299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 			files = (
 				CA31B806298C0548006A0FB2 /* TabBarController.swift in Sources */,
 				CAD889FF299E17CE003FA440 /* FooterLoaderCollectionReusableView.swift in Sources */,
+				CAD88A03299E5C55003FA440 /* ResultMessage.swift in Sources */,
 				CA4EA573299B81B000223FF6 /* APIRequest.swift in Sources */,
 				CA4EA580299BB4E100223FF6 /* ImageHitCollectionViewCell.swift in Sources */,
 				CA4EA577299BA37500223FF6 /* HitsResponse.swift in Sources */,
@@ -252,6 +259,7 @@
 				CA4EA57A299BA39200223FF6 /* Hits.swift in Sources */,
 				CA4EA56B299B780900223FF6 /* SearchViewController.swift in Sources */,
 				CA4EA571299B79C100223FF6 /* SavedImagesListView.swift in Sources */,
+				CAD88A01299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift in Sources */,
 				CA4EA57E299BA83D00223FF6 /* Extensions.swift in Sources */,
 				CA4EA56F299B79A800223FF6 /* SearchImagesListView.swift in Sources */,
 				CA4EA57C299BA4FB00223FF6 /* SearchImagesListViewViewModel.swift in Sources */,
