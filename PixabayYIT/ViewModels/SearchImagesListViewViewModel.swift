@@ -15,11 +15,17 @@ final class SearchImagesListViewViewModel: NSObject {
     
     private var cellViewModels: [ImageHitCollectionViewCellViewModel] = []
     public weak var delegate: SearchImagesListViewViewModelDelegate?
+    private let cellHeight: Double = 70
     
     private var hitsArray: [Hits] = [] {
         didSet {
             for hit in hitsArray {
-                let viewModel = ImageHitCollectionViewCellViewModel(previewURLString: hit.previewURL)
+                guard let previewHeight = hit.previewHeight, let previewWidth = hit.previewWidth else {
+                    return
+                }
+                
+                let imageWidth = (cellHeight / Double(previewHeight)) * Double(previewWidth)
+                let viewModel = ImageHitCollectionViewCellViewModel(previewURLString: hit.previewURL, imageWidth: imageWidth)
                 
                 if !cellViewModels.contains(viewModel) {
                     cellViewModels.append(viewModel)
@@ -47,7 +53,7 @@ final class SearchImagesListViewViewModel: NSObject {
     }
 }
 
-extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellViewModels.count
     }
@@ -59,6 +65,15 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
         
         let viewModel = cellViewModels[indexPath.item]
         cell.configure(with: viewModel)
+        cell.sizeToFit()
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let item = cellViewModels[indexPath.item]
+        let width: Double = item.imageWidth ?? 0
+        let height = cellHeight
+        return CGSize(width: width, height: height)
+    }
 }
+

@@ -18,8 +18,10 @@ class ImageHitCollectionViewCellViewModel: Hashable, Equatable {
     }
     
     public let previewURLString: String?
+    public let imageWidth: Double?
     
-    init(previewURLString: String?) {
+    init(previewURLString: String?, imageWidth: Double?) {
         self.previewURLString = previewURLString
+        self.imageWidth = imageWidth
     }
 }

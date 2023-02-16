@@ -36,6 +36,12 @@ class ImageHitCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+            let targetSize = CGSize(width: layoutAttributes.frame.width, height: 0)
+            layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            return layoutAttributes
+        }
+    
     public func configure(with viewModel: ImageHitCollectionViewCellViewModel) {
         ImageLoader.shared.loadImage(viewModel.previewURLString) { [weak self] result in
             switch result {
