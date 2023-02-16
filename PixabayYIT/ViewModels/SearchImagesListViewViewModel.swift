@@ -148,8 +148,10 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
         if kind == UICollectionView.elementKindSectionFooter,
            shouldShowLoader,
            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId, for: indexPath) as? FooterLoaderCollectionReusableView {
-            if cellViewModels.count >= imagesPerPage, isLoadingMoreImages {
+            if cellViewModels.count >= imagesPerPage, !cellViewModels.isEmpty {
                 footer.startAnimating()
+            } else {
+                footer.stopAnimating()
             }
             return footer
         }
