@@ -20,6 +20,7 @@ class SearchViewController: UIViewController {
     private func setupView() {
         title = "Search Images"
         view.addSubview(searchImagesListView)
+        searchImagesListView.delegate = self
     }
     
     private func setColors() {
@@ -33,5 +34,13 @@ class SearchViewController: UIViewController {
             searchImagesListView.leftAnchor.constraint(equalTo: view.leftAnchor),
             searchImagesListView.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
+    }
+}
+
+extension SearchViewController: SearchImagesListViewDelegate {
+    func didSelectImage(at indexPath: IndexPath, hits: [Hits]) {
+        let viewModel = ImageDetailViewViewModel(hits: hits, selectedIndexPath: indexPath)
+        let vc = ImageDetailViewController(viewModel: viewModel)
+        showDetailViewController(vc, sender: self)
     }
 }

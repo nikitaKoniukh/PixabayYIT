@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol SearchImagesListViewDelegate: AnyObject {
+    func didSelectImage(at indexPath: IndexPath, hits: [Hits])
+}
+
 final class SearchImagesListView: UIView {
     
     private let viewModel = SearchImagesListViewViewModel()
+    weak var delegate: SearchImagesListViewDelegate?
     
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -30,7 +35,7 @@ final class SearchImagesListView: UIView {
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +96,10 @@ final class SearchImagesListView: UIView {
 }
 
 extension SearchImagesListView: SearchImagesListViewViewModelDelegate {
+    func didSelectImage(at indexPath: IndexPath, hits: [Hits]) {
+        delegate?.didSelectImage(at: indexPath, hits: hits)
+    }
+    
     func searchFailed(with errorText: String) {
         collectionView.reloadData()
         showCollectionView()

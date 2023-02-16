@@ -13,6 +13,7 @@ protocol SearchImagesListViewViewModelDelegate: AnyObject {
     func didLoadMoreHits(with newIndexPaths: [IndexPath])
     func noImagesToShow()
     func searchFailed(with errorText: String)
+    func didSelectImage(at indexPath: IndexPath, hits: [Hits])
 }
 
 final class SearchImagesListViewViewModel: NSObject {
@@ -134,6 +135,11 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
         cell.configure(with: viewModel)
         cell.sizeToFit()
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        delegate?.didSelectImage(at: indexPath, hits: hitsArray)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
