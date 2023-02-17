@@ -31,6 +31,8 @@
 		CAD88A06299E74A8003FA440 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A05299E74A8003FA440 /* ImageDetailViewController.swift */; };
 		CAD88A08299E75FC003FA440 /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A07299E75FC003FA440 /* ImageDetailView.swift */; };
 		CAD88A0A299E7640003FA440 /* ImageDetailViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A09299E7640003FA440 /* ImageDetailViewViewModel.swift */; };
+		CAD88A0F299F7442003FA440 /* FileManagerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A0E299F7442003FA440 /* FileManagerAPI.swift */; };
+		CAD88A11299F7DE3003FA440 /* SavedImagesListViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD88A10299F7DE3003FA440 /* SavedImagesListViewViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +63,8 @@
 		CAD88A07299E75FC003FA440 /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		CAD88A09299E7640003FA440 /* ImageDetailViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewViewModel.swift; sourceTree = "<group>"; };
 		CAD88A0D299F5781003FA440 /* PixabayYIT.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PixabayYIT.entitlements; sourceTree = "<group>"; };
+		CAD88A0E299F7442003FA440 /* FileManagerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerAPI.swift; sourceTree = "<group>"; };
+		CAD88A10299F7DE3003FA440 /* SavedImagesListViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedImagesListViewViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +147,7 @@
 			children = (
 				CA4EA572299B81B000223FF6 /* APIRequest.swift */,
 				CA4EA574299BA1D800223FF6 /* APIService.swift */,
+				CAD88A0E299F7442003FA440 /* FileManagerAPI.swift */,
 			);
 			path = APIClients;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 				CA4EA57B299BA4FB00223FF6 /* SearchImagesListViewViewModel.swift */,
 				CAD88A09299E7640003FA440 /* ImageDetailViewViewModel.swift */,
 				CA4EA581299BB5FE00223FF6 /* ImageHitCollectionViewCellViewModel.swift */,
+				CAD88A10299F7DE3003FA440 /* SavedImagesListViewViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -278,6 +284,8 @@
 				CA31B802298C0548006A0FB2 /* AppDelegate.swift in Sources */,
 				CA4EA57A299BA39200223FF6 /* Hits.swift in Sources */,
 				CAD88A0A299E7640003FA440 /* ImageDetailViewViewModel.swift in Sources */,
+				CAD88A11299F7DE3003FA440 /* SavedImagesListViewViewModel.swift in Sources */,
+				CAD88A0F299F7442003FA440 /* FileManagerAPI.swift in Sources */,
 				CA4EA56B299B780900223FF6 /* SearchViewController.swift in Sources */,
 				CA4EA571299B79C100223FF6 /* SavedImagesListView.swift in Sources */,
 				CAD88A01299E30C4003FA440 /* HeaderSearchCollectionReusableView.swift in Sources */,

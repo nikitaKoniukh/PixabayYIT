@@ -78,6 +78,9 @@ class ImageDetailViewViewModel: NSObject {
                 DispatchQueue.main.async {
                     self?.delegate?.mainImageFetched(with: data)
                     self?.imageData = data
+                    if let id = self?.selectedHit.id  {
+                        FileManagerAPI.shared.saveImage(imageName: String(id), imageData: data)
+                    }
                 }
             case .failure:
                 fatalError()

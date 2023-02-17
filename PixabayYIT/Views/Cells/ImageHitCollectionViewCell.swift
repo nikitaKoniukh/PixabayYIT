@@ -60,4 +60,8 @@ class ImageHitCollectionViewCell: UICollectionViewCell {
             }
         }
     }
+    
+    public func configure(with image: UIImage) {
+        imageView.image = image
+    }
 }

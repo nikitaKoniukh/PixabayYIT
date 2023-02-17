@@ -17,6 +17,11 @@ class SavedImagesViewController: UIViewController {
         addConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        savedImagesListView.reloadCollectionView()
+    }
+    
     private func setupView() {
         title = "Your Saved Images"
         view.addSubview(savedImagesListView)
