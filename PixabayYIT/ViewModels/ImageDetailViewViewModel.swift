@@ -56,9 +56,8 @@ class ImageDetailViewViewModel: NSObject {
     
     var mailComposeViewController: MFMailComposeViewController {
         let mail = MFMailComposeViewController()
-        mail.setCcRecipients(["yyyy@xxx.com"])
-        mail.setSubject("Your messagge")
-        mail.setMessageBody("Message body", isHTML: false)
+        mail.setSubject("Chet what I found on Pixabay")
+        mail.setMessageBody(selectedHit.pageURL ?? "", isHTML: false)
         mail.addAttachmentData(imageData!, mimeType: "image/png", fileName: "imageName.png")
         return mail
     }
@@ -78,6 +77,7 @@ class ImageDetailViewViewModel: NSObject {
             case .success(let data):
                 DispatchQueue.main.async {
                     self?.delegate?.mainImageFetched(with: data)
+                    self?.imageData = data
                 }
             case .failure:
                 fatalError()
@@ -91,7 +91,6 @@ class ImageDetailViewViewModel: NSObject {
             case .success(let data):
                 DispatchQueue.main.async {
                     self?.delegate?.userImageFetched(with: data, error: nil)
-                    self?.imageData = data
                 }
             case .failure(let error):
                 DispatchQueue.main.async {

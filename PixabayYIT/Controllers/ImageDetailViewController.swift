@@ -46,4 +46,8 @@ extension ImageDetailViewController: ImageDetailViewDelegate {
         mail.mailComposeDelegate = self
         self.present(mail, animated: true, completion: nil)
     }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
 }
