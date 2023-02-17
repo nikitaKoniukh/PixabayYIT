@@ -144,8 +144,10 @@ extension SearchImagesListViewViewModel: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let item = cellViewModels[indexPath.item]
-        let width: Double = item.imageWidth ?? 0
-        let height = cellHeight
+//        let width: Double = item.imageWidth ?? 0
+        let width: Double = (collectionView.frame.width - 16.0) / 2
+//        let height = cellHeight
+        let height: Double = (collectionView.frame.width - 16.0) / 2
         return CGSize(width: width, height: height)
     }
     

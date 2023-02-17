@@ -28,6 +28,9 @@ final class SearchImagesListView: UIView {
         layout.scrollDirection = .vertical
         layout.sectionHeadersPinToVisibleBounds = true
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+       
+        
         collectionView.register(ImageHitCollectionViewCell.self, forCellWithReuseIdentifier: ImageHitCollectionViewCell.cellId)
         collectionView.register(FooterLoaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterLoaderCollectionReusableView.footerId)
         collectionView.register(HeaderSearchCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderSearchCollectionReusableView.headerId)

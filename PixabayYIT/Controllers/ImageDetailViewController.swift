@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class ImageDetailViewController: UIViewController {
+class ImageDetailViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     private var viewModel: ImageDetailViewViewModel
     private let detailView: ImageDetailView
@@ -25,6 +26,7 @@ class ImageDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(detailView)
+        detailView.delegate = self
         addConstraints()
     }
     
@@ -37,4 +39,11 @@ class ImageDetailViewController: UIViewController {
         ])
     }
 
+}
+
+extension ImageDetailViewController: ImageDetailViewDelegate {
+    func sendMail(mail: MFMailComposeViewController) {
+        mail.mailComposeDelegate = self
+        self.present(mail, animated: true, completion: nil)
+    }
 }

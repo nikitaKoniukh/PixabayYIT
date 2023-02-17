@@ -6,9 +6,15 @@
 //
 
 import UIKit
+import MessageUI
+
+protocol ImageDetailViewDelegate: AnyObject {
+    func sendMail(mail: MFMailComposeViewController)
+}
 
 class ImageDetailView: UIView {
     let viewModel: ImageDetailViewViewModel
+    weak var delegate: ImageDetailViewDelegate?
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -65,6 +71,20 @@ class ImageDetailView: UIView {
         return label
     }()
     
+    private let shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    @objc
+    private func sharePressed(_ sender : UIButton) {
+        if MFMailComposeViewController.canSendMail() {
+            delegate?.sendMail(mail: viewModel.mailComposeViewController)
+        }
+    }
+    
     init(frame: CGRect, viewModel: ImageDetailViewViewModel) {
         self.viewModel = viewModel
         super.init(frame: frame)
@@ -73,7 +93,7 @@ class ImageDetailView: UIView {
         backgroundColor = .systemBackground
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubviews(mainImageView, userImageView, userNameLabel, tagsLabel, likesLabel)
+        contentView.addSubviews(mainImageView, userImageView, userNameLabel, tagsLabel, likesLabel, shareButton)
         addConstraints()
         setupViews()
     }
@@ -103,9 +123,12 @@ class ImageDetailView: UIView {
             userImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
             userImageView.widthAnchor.constraint(equalToConstant: 60),
             userImageView.heightAnchor.constraint(equalToConstant: 60),
+        
+            shareButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 60),
+            shareButton.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor),
             
             userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20),
-            userNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            userNameLabel.rightAnchor.constraint(equalTo: shareButton.leftAnchor, constant: -10),
             userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor),
             
             tagsLabel.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 20),
@@ -123,16 +146,24 @@ class ImageDetailView: UIView {
         tagsLabel.text = viewModel.tags
         userNameLabel.text = viewModel.user
         likesLabel.text = viewModel.likes
+        shareButton.addTarget(self, action: #selector(sharePressed(_:)), for: .touchUpInside)
     }
 }
 
 extension ImageDetailView: ImageDetailViewViewModelDelegate {
-    func userImageFetched(with data: Data) {
+    func userImageFetched(with data: Data?, error: Error?) {
+        guard let data = data, error == nil else {
+            userImageView.image = UIImage(systemName: "eye.slash.circle")
+            userImageView.tintColor = .label
+            return
+        }
         userImageView.image = UIImage(data: data)
-        
     }
+    
     
     func mainImageFetched(with data: Data) {
         mainImageView.image = UIImage(data: data)
     }
 }
+
+

@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import MessageUI
 
 protocol ImageDetailViewViewModelDelegate: AnyObject {
     func mainImageFetched(with data: Data)
-    func userImageFetched(with data: Data)
+    func userImageFetched(with data: Data?, error: Error?)
 }
 
 class ImageDetailViewViewModel: NSObject {
@@ -18,6 +19,7 @@ class ImageDetailViewViewModel: NSObject {
     private let hits: [Hits]
     private let selectedIndexPath: IndexPath
     private let selectedHit: Hits
+    private var imageData: Data?
     
     var tags: String {
         guard let tags = selectedHit.tags else {
@@ -52,6 +54,15 @@ class ImageDetailViewViewModel: NSObject {
         return Double(newHeight)
     }
     
+    var mailComposeViewController: MFMailComposeViewController {
+        let mail = MFMailComposeViewController()
+        mail.setCcRecipients(["yyyy@xxx.com"])
+        mail.setSubject("Your messagge")
+        mail.setMessageBody("Message body", isHTML: false)
+        mail.addAttachmentData(imageData!, mimeType: "image/png", fileName: "imageName.png")
+        return mail
+    }
+    
     init(hits: [Hits], selectedIndexPath: IndexPath) {
         self.hits = hits
         self.selectedIndexPath = selectedIndexPath
@@ -79,10 +90,13 @@ class ImageDetailViewViewModel: NSObject {
             switch result {
             case .success(let data):
                 DispatchQueue.main.async {
-                    self?.delegate?.userImageFetched(with: data)
+                    self?.delegate?.userImageFetched(with: data, error: nil)
+                    self?.imageData = data
                 }
             case .failure(let error):
-                fatalError(error.localizedDescription)
+                DispatchQueue.main.async {
+                    self?.delegate?.userImageFetched(with: nil, error: error)
+                }
             }
         })
     }
