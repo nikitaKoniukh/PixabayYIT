@@ -7,10 +7,14 @@
 
 import Foundation
 
-final class APIService {
+protocol APIServiceProtocol {
+    func execute<T: Codable>(_ request: APIRequest, expecting type: T.Type, completion: @escaping (Result<T, Error>) -> Void)
+}
+
+class APIService {
     static let shared = APIService()
     
-    private init(){}
+    init(){}
     
     enum APIServiceError: Error {
         case failedToCreateRequest
